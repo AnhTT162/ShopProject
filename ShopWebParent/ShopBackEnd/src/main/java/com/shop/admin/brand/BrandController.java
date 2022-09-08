@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.shop.admin.category.CategoryService;
 import com.shop.common.entity.Brand;
@@ -37,5 +38,10 @@ public class BrandController {
 		model.addAttribute("pageTitle", "Tạo thương hiệu mới");
 		
 		return "brands/brand_form";
+	}
+	
+	@PostMapping("/brands/save")
+	public String saveBrand() {
+		return "";
 	}
 }
