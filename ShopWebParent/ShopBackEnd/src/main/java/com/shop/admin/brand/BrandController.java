@@ -42,6 +42,6 @@ public class BrandController {
 	
 	@PostMapping("/brands/save")
 	public String saveBrand() {
-		return "";
+		return "brands";
 	}
 }
