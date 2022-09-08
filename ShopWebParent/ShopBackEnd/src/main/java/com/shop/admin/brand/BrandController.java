@@ -42,10 +42,7 @@ public class BrandController {
 	
 	@PostMapping("/brands/save")
 	public String saveBrand() {
-<<<<<<< HEAD
 		return "aa";
-=======
-		return "brands";
->>>>>>> branch 'master' of https://github.com/trananh160299/ShopProject.git
+
 	}
 }
