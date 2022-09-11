@@ -29,7 +29,7 @@
 						<input type="hidden" th:field="*{logo}" />
 						<input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg"
 							class="mb-2" 
-							required />
+							th:required="${brand.id == null}" />
 							<div class="mt-2">
 							<img id="thumbnail" alt="Image preview" th:src="@{${brand.logoPath}}"
 							style="max-width: 33%; max-height: auto" />
@@ -91,6 +91,26 @@
 				
 				
 			});
+		}
+		
+		function checkUnique(form){
+			brandId = $("#id").val();
+			brandName = $("#name").val();
+			csrfValue = $("input[name='_csrf']").val();
+			url = "[[@{/brands/check_unique}]]";
+			params = {id: brandId, name: brandName, _csrf: csrfValue};
+			$.post(url, params, function(response){
+				if(response == "OK"){
+					form.submit();
+				} else if (response == "Duplicate"){
+					showWarningModal("Thương hiệu: \"" + brandName + "\" đã tồn tại")
+				} else {
+					showErrorModal("Phản hồi không xác định từ máy chủ")
+				}
+			}).fail(function(){
+				showErrorModal("Không thể kết nối tới máy chủ");
+			});
+			return false;
 		}
 		
 		
