@@ -77,6 +77,7 @@ public class CategoryController {
 		category.setImage(fileName);
 		Category savedCategory = service.save(category);
 		String uploadDir = "../category-images/" + savedCategory.getId();
+		FileUploadUtil.cleanDir(uploadDir);
 		FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 		} else {
 			if(category.getImage().isEmpty()) category.setImage(null);
@@ -118,7 +119,7 @@ public class CategoryController {
 			service.delete(id);
 			String categoryDir = "../category-images/" + id;
 			FileUploadUtil.removeDir(categoryDir);
-			redirectAttributes.addFlashAttribute("message", "Tài khoản ID " + id + " đã được xóa");
+			redirectAttributes.addFlashAttribute("message", "Danh mục ID " + id + " đã được xóa");
 		} catch (CategoryNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("message", ex.getMessage());
 		}
