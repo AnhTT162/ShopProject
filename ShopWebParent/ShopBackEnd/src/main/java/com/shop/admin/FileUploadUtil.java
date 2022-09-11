@@ -30,7 +30,6 @@ public class FileUploadUtil {
 					try {
 						Files.delete(file);
 					} catch (IOException ex) {
-						System.out.println("Không thể xóa file: " + file);
 					}
 				}
 			});

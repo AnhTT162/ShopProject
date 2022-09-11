@@ -87,7 +87,7 @@ public class CategoryController {
 		return "redirect:/categories";
 	}
 	
-	@GetMapping("categories/edit/{id}")
+	@GetMapping("/categories/edit/{id}")
 	public String editCategory(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			Category category = service.get(id);
