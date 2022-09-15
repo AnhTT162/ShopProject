@@ -39,7 +39,6 @@ public class Brand {
 	}
 
 	public Brand(String name) {
-		super();
 		this.name = name;
 		this.logo = "brand-logo.png";
 	}
@@ -49,7 +48,6 @@ public class Brand {
 	
 
 	public Brand(Integer id, String name) {
-		super();
 		this.id = id;
 		this.name = name;
 	}
