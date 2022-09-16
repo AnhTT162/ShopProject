@@ -73,7 +73,7 @@ public class CategoryController {
 			@RequestParam("fileImage") MultipartFile multipartFile,
 			RedirectAttributes redirectAttributes) throws IOException {
 		if(!multipartFile.isEmpty()) {
-		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll(" ", "-"));
 		category.setImage(fileName);
 		Category savedCategory = service.save(category);
 		String uploadDir = "../category-images/" + savedCategory.getId();

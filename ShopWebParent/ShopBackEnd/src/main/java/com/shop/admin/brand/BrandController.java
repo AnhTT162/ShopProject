@@ -82,7 +82,7 @@ public class BrandController {
 			@RequestParam("fileImage") MultipartFile multipartFile,
 			RedirectAttributes redirectAttributes) throws IOException {
 		if(!multipartFile.isEmpty()) {
-			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll(" ", "-"));
 			brand.setLogo(fileName);
 			Brand savedBrand = brandService.save(brand);
 			String uploadDir = "../brand-logos/" + savedBrand.getId();

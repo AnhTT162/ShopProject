@@ -34,7 +34,9 @@
 					<tbody>
 						<tr th:each="product : ${listProducts}">
 							<td class="hideable-column">[[${product.id}]]</td>
-							<td></td>
+							<td>
+								<img th:src="@{${product.mainImagePath}}" style="width: 120px" class="img-fluid" />
+							</td>
 							<td>[[${product.name}]]</td>
 							<td>[[${product.brand.name}]]</td>
 							<td>[[${product.category.name}]]</td>
@@ -93,7 +95,7 @@
 		$(document).ready(function() {
 			$(".link-delete").on("click", function(e) {
 				e.preventDefault();
-				showDeleteConfirmModal($(this), 'thương hiệu');
+				showDeleteConfirmModal($(this), 'sản phẩm');
 			});
 		});
 	</script>
