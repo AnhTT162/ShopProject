@@ -111,5 +111,21 @@ public class ProductRepositoryTests {
 		assertThat(savedProduct.getImages().size()).isEqualTo(3);
 		
 	}
+	
+	@Test
+	public void testCreateProductWithDetails() {
+		Integer id = 2;
+		Product product = repo.findById(id).get();
+		
+		
+		product.addProductDetail("detail_1","detail_1");
+		product.addProductDetail("detail_2","detail_2");
+		product.addProductDetail("detail_3","detail_2");
+		
+		Product savedProduct = repo.save(product);
+		
+		assertThat(savedProduct.getDetails().size()).isEqualTo(3);
+		
+	}
 
 }

@@ -2,13 +2,13 @@ package com.shop.admin.product;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shop.common.entity.Brand;
 import com.shop.common.entity.Product;
 
 @Service
@@ -64,6 +64,16 @@ public class ProductService {
 			throw new ProductNotFoundException("Không tồn tại sản phẩm có ID: " + id);
 		}
 		repo.deleteById(id);
+	}
+	
+	public Product get(Integer id) throws ProductNotFoundException {
+		try {
+			return repo.findById(id).get();
+		} catch (NoSuchElementException ex) {
+			throw new ProductNotFoundException("Sản phẩm có ID: " + id + " không tồn tại.");
+		}
+		
+		
 	}
 
 }

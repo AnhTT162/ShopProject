@@ -7,9 +7,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileUploadUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
+	
 	public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 		Path uploadPath = Paths.get(uploadDir);
 		if(!Files.exists(uploadPath)) {
@@ -30,11 +34,12 @@ public class FileUploadUtil {
 					try {
 						Files.delete(file);
 					} catch (IOException ex) {
+						LOGGER.error("Không thể xóa file: " + file);
 					}
 				}
 			});
 		} catch (IOException ex2) {
-			System.out.println("Không thể mở thư mục: " + dirPath);
+			LOGGER.error("Không thể mở thư mục: " + dirPath);
 		}
 	}
 	public static void removeDir(String dir) {
@@ -42,7 +47,7 @@ public class FileUploadUtil {
 		try {
 			Files.delete(Paths.get(dir));
 		} catch (IOException e) {
-			System.out.println("Không thể xóa thư mục: " + dir);
+			LOGGER.error("Không thể xóa thư mục: " + dir);
 		}
 		
 	}

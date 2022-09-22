@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shop.admin.FileUploadUtil;
 import com.shop.admin.category.CategoryService;
-import com.shop.admin.user.UserService;
 import com.shop.common.entity.Brand;
 import com.shop.common.entity.Category;
 
