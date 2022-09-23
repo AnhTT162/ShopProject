@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "product_image")
+@Table(name = "product_images")
 public class ProductImage {
 
 	@Id

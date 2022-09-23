@@ -10,10 +10,36 @@
 				class="fa-solid fa-folder-plus fa-2x icon-black"></a>
 		</div>
 		<div>
-
-			<div
-				th:replace="fragments :: search_form_and_message('/products/page/1')"></div>
-
+				<form th:action="@{/products/page/1}" class="form-inline m-3" id="searchForm">
+					<input type="hidden" name="sortField" th:value="${sortField}" /> <input
+						type="hidden" name="sortDir" th:value="${sortDir}" /> 
+					Danh mục:
+					&nbsp;
+					<select class="form-control" name="categoryId" id="dropdownCategory">
+						<option value="0">Tất cả danh mục</option>
+						
+						<th:block th:each="cat : ${listCategories}">
+							<option th:value="${cat.id}" th:selected="(${categoryId} == ${cat.id})">[[${cat.name}]]</option>
+						</th:block>
+					</select>
+					&nbsp;
+					Tìm kiếm:&nbsp; <input type="search" name="keyword"
+						th:value="${keyword}" class="form-control" required />
+					&nbsp;&nbsp;
+					<button type="submit" class="btn btn-primary">
+						<i class="fas fa-search"></i>
+					</button>
+					&nbsp;&nbsp;
+					<button type="button" class="btn btn-secondary"
+						onclick="clearFilter()">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</form>
+				<div th:if="${message != null}"
+					class="alert alert-success text-center">[[${message}]]</div>
+			</div>
+		
+		<div>
 			<div class="full-details">
 				<table
 					class="table table-bordered table-striped table-hover table-responsice-xl">
@@ -25,8 +51,10 @@
 							<th>Ảnh</th>
 							<th
 								th:replace="fragments :: column_link('/products', 'name', 'Tên sản phẩm', 'none')" />
-							<th>Thương hiệu</th>
-							<th>Danh mục</th>
+							<th
+								th:replace="fragments :: column_link('/products', 'brand', 'Thương hiệu', 'none')" />
+							<th
+								th:replace="fragments :: column_link('/products', 'category', 'Danh mục', 'none')" />
 							<th>Kích hoạt</th>
 							<th></th>
 						</tr>
@@ -34,10 +62,11 @@
 					<tbody>
 						<tr th:each="product : ${listProducts}">
 							<td class="hideable-column">[[${product.id}]]</td>
-							<td>
-								<img th:src="@{${product.mainImagePath}}" style="width: 120px" class="img-fluid" />
-							</td>
-							<td>[[${product.name}]]</td>
+							<td><img th:src="@{${product.mainImagePath}}"
+								style="width: 120px" class="img-fluid" /></td>
+							<td><a class="link-detail"
+								th:href="@{'/products/detail/' + ${product.id}}"
+								th:title="${product.name}">[[${product.shortName}]]</a></td>
 							<td>[[${product.brand.name}]]</td>
 							<td>[[${product.category.name}]]</td>
 							<td>
@@ -45,10 +74,9 @@
 									th:replace="fragments :: status(${product.enabled}, 'sản phẩm', '/products/' + ${product.id})"></div>
 							</td>
 
-							<td><a class="fas fa-file-alt fa-2x icon-black"
+							<td><a class="fas fa-file-alt fa-2x icon-black link-detail"
 								th:href="@{'/products/detail/' + ${product.id}}"
-								title="Xem chi tiết sản phẩm này"></a>
-								&nbsp;
+								title="Xem chi tiết sản phẩm này"></a> &nbsp;
 								<div
 									th:replace="fragments :: edit('sản phẩm', '/products/edit/' + ${product.id})"></div>
 								&nbsp;
@@ -83,21 +111,40 @@
 			</div>
 		</div>
 
-		<div th:replace="fragments :: pagination('/brands', 'thương hiệu')"></div>
+		<div th:replace="fragments :: pagination('/products', 'sản phẩm')"></div>
 
 		<div th:replace="modal_fragments :: confirm_modal"></div>
+
+		<div class="modal fade" id="detailModal">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content"></div>
+			</div>
+		</div>
 
 		<div th:replace="fragments :: footer"></div>
 	</div>
 	<script th:src="@{/js/common_list.js}"></script>
 	<script type="text/javascript">
-		moduleURL = "[[@{/brands}]]";
-		$(document).ready(function() {
-			$(".link-delete").on("click", function(e) {
-				e.preventDefault();
-				showDeleteConfirmModal($(this), 'sản phẩm');
-			});
-		});
+		moduleURL = "[[@{/products}]]";
+		$(document).ready(
+				function() {
+					$(".link-delete").on("click", function(e) {
+						e.preventDefault();
+						showDeleteConfirmModal($(this), 'sản phẩm');
+					});
+
+					$(".link-detail").on(
+							"click",
+							function(e) {
+								e.preventDefault();
+								linkDetailURL = $(this).attr("href");
+								$("#detailModal").modal("show").find(
+										".modal-content").load(linkDetailURL);
+							});
+					$("#dropdownCategory").on("change", function(){
+						$("#searchForm").submit();
+					});
+				});
 	</script>
 </body>
 </html>
