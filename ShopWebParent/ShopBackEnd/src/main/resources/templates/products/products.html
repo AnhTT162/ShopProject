@@ -48,32 +48,46 @@
 							<th class="hideable-column">
 							<th
 								th:replace="fragments :: column_link('/products', 'id', 'ID', 'tag')" />
+							
 							<th>Ảnh</th>
+							
 							<th
 								th:replace="fragments :: column_link('/products', 'name', 'Tên sản phẩm', 'none')" />
+							
+							<th class="hideable-column">
 							<th
-								th:replace="fragments :: column_link('/products', 'brand', 'Thương hiệu', 'none')" />
+								th:replace="fragments :: column_link('/products', 'brand', 'Thương hiệu', 'tag')" />
+							
+							<th class="hideable-column">
 							<th
-								th:replace="fragments :: column_link('/products', 'category', 'Danh mục', 'none')" />
+								th:replace="fragments :: column_link('/products', 'category', 'Danh mục', 'tag')" />
+							
 							<th>Kích hoạt</th>
+							
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="product : ${listProducts}">
 							<td class="hideable-column">[[${product.id}]]</td>
+							
 							<td><img th:src="@{${product.mainImagePath}}"
 								style="width: 120px" class="img-fluid" /></td>
+							
 							<td><a class="link-detail"
 								th:href="@{'/products/detail/' + ${product.id}}"
 								th:title="${product.name}">[[${product.shortName}]]</a></td>
-							<td>[[${product.brand.name}]]</td>
-							<td>[[${product.category.name}]]</td>
+							
+							<td class="hideable-column">[[${product.brand.name}]]</td>
+							
+							<td class="hideable-column">[[${product.category.name}]]</td>
+							
 							<td>
 								<div
 									th:replace="fragments :: status(${product.enabled}, 'sản phẩm', '/products/' + ${product.id})"></div>
 							</td>
 
+							
 							<td><a class="fas fa-file-alt fa-2x icon-black link-detail"
 								th:href="@{'/products/detail/' + ${product.id}}"
 								title="Xem chi tiết sản phẩm này"></a> &nbsp;
@@ -90,21 +104,27 @@
 		</div>
 
 		<div class="less-details">
-			<div th:each="brand : ${listBrands}" class="row m-1">
-				<div class="col-6">
-					<img th:src="@{${brand.logoPath}}" style="width: 100px"
+			<div th:each="product : ${listProducts}" class="row m-1">
+				<div class="col-4">
+					<img th:src="@{${product.mainImagePath}}" style="width: 80px"
 						class="img-fluid" />
 				</div>
-				<div class="col-6">
+				<div class="col-8">
 					<div>
-						<b>[[${brand.name}]]</b>
+						<a class="link-detail"
+								th:href="@{'/products/detail/' + ${product.id}}"
+								th:title="${product.name}">[[${product.shortName}]]</a>
 					</div>
 					<div class="mt-2">
-						<div
-							th:replace="fragments :: edit('thương hiệu', '/brands/edit/' + ${brand.id})"></div>
+						<a class="fas fa-file-alt fa-2x icon-black link-detail"
+								th:href="@{'/products/detail/' + ${product.id}}"
+								title="Xem chi tiết sản phẩm này"></a>
 						&nbsp;
 						<div
-							th:replace="fragments :: delete('thương hiệu', ${brand.id}, '/brands/delete/' + ${brand.id}, true)"></div>
+							th:replace="fragments :: edit('sản phẩm', '/products/edit/' + ${product.id})"></div>
+						&nbsp;
+						<div
+							th:replace="fragments :: delete('sản phẩm', ${product.id}, '/products/delete/' + ${product.id}, true)"></div>
 					</div>
 				</div>
 				<div>&nbsp;</div>
