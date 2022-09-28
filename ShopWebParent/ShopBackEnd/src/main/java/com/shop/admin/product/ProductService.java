@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.shop.common.entity.Brand;
 import com.shop.common.entity.Product;
+import com.shop.common.exception.ProductNotFoundException;
 
 @Service
 @Transactional

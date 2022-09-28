@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+<title>[[${title}]]</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+	<a th:fragment="page_link(moduleURL, pageNum, pageLabel)"
+		class="page-link"
+		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+		[[${pageLabel}]] </a>
+
+	<div th:fragment="pagination(moduleURL, entityName)" th:remove="tag">
+		<div class="text-center m-1" th:if="${totalItems>0}">
+			<span>#[[${startCount}]] to #[[${endCount}]] of
+				[[${totalItems}]]</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems>0}">
+			<span>Không tồn tại [[${entityName}]] nào</span>
+		</div>
+		<div th:if="${totalItems > 4}" )>
+			<nav>
+				<ul class="pagination justify-content-center flex-wrap">
+					<li
+						th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
+						<a
+						th:replace="fragments :: page_link(${moduleURL}, 1, 'Đầu tiên')" />
+					</li>
+					<li
+						th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
+						<a
+						th:replace="fragments :: page_link(${moduleURL}, ${currentPage - 1}, 'Trước')" />
+					</li>
+					<li
+						th:class="${currentPage != i ? 'page-item': 'page-item active'}"
+						th:each="i : ${#numbers.sequence(1, totalPages)}"><a
+						th:replace="fragments :: page_link(${moduleURL}, ${i}, ${i})" /></li>
+					<li
+						th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
+						<a
+						th:replace="fragments :: page_link(${moduleURL}, ${currentPage + 1}, 'Sau')" />
+					</li>
+					<li
+						th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
+						<a
+						th:replace="fragments :: page_link(${moduleURL}, ${totalPages}, 'Cuối cùng')" />
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</body>
+</html>
