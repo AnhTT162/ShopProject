@@ -20,16 +20,11 @@ $(document).ready(function() {
 	fieldCountryCode = $("#fieldCountryCode");
 
 	buttonLoad.click(function() {
-		if (buttonLoad.val() == "Làm mới danh sách") {
 			loadCountries();
-			noSelect();
-		} else {
-			loadCountries();
-		}
-
+			noSelectCountry();
 	});
 	dropDownCountry.on("change", function() {
-		changeFormStateToSelectedCountry();
+		changeFormToSelectedCountry();
 	});
 	buttonAddCountry.click(function() {
 		if (buttonAddCountry.val() == "Lưu") {
@@ -60,7 +55,7 @@ function deleteCountry() {
 		}
 	}).done(function() {
 		$("#dropDownCountries option[value='" + optionValue + "']").remove();
-		changeFormCountryToNew();
+		noSelectCountry();
 		showToastMessage("Thông tin quốc gia đã được xóa.");
 	}).fail(function() {
 		showToastMessage("Lỗi: Không thể kết nối đến máy chủ hoặc máy chủ gặp lỗi.");
@@ -88,7 +83,6 @@ function updateCountry() {
 		$("#dropDownCountries option:selected").val(countryId + "-" + countryCode);
 		$("#dropDownCountries option:selected").text(countryName);
 		showToastMessage("Thông tin quốc gia đã được cập nhật.");
-		//changeFormCountryToNew();
 	}).fail(function() {
 		showToastMessage("Lỗi: Không thể kết nối đến máy chủ hoặc máy chủ gặp lỗi.");
 	});
@@ -122,11 +116,10 @@ function selectNewlyAddedCountry(countryId, countryCode, countryName) {
 	$("<option>").val(optionValue).text(countryName).appendTo(dropDownCountry);
 	$("#dropDownCountries option[value='" + optionValue + "']").prop("selected", true);
 	fieldCountryCode.val(countryCode);
-	fieldCountryName.val(countryName).focus;
+	fieldCountryName.val(countryName).focus();
 	buttonAddCountry.prop("value", "Thêm mới");
 	buttonUpdateCountry.prop("disabled", false);
 	buttonDeleteCountry.prop("disabled", false);
-
 	labelCountryName.text("Tên quốc gia (đang chọn): ")
 }
 
@@ -136,21 +129,20 @@ function changeFormCountryToNew() {
 	buttonUpdateCountry.prop("disabled", true);
 	buttonDeleteCountry.prop("disabled", true);
 
-	fieldCountryCode.val("");
-	fieldCountryName.val("").focus();
+	fieldCountryCode.val("").prop("disabled", false);
+	fieldCountryName.val("").prop("disabled", false).focus();
 }
 
 
-function changeFormStateToSelectedCountry() {
+function changeFormToSelectedCountry() {
 	buttonAddCountry.prop("value", "Thêm mới");
 	buttonUpdateCountry.prop("disabled", false);
 	buttonDeleteCountry.prop("disabled", false);
-
 	labelCountryName.text("Tên quốc gia (đang chọn): ")
 	selectedCountryName = $("#dropDownCountries option:selected").text();
-	fieldCountryName.val(selectedCountryName);
+	fieldCountryName.val(selectedCountryName).prop("disabled", false).focus();
 	countryCode = dropDownCountry.val().split("-")[1];
-	fieldCountryCode.val(countryCode);
+	fieldCountryCode.val(countryCode).prop("disabled", false);
 
 }
 
@@ -176,12 +168,11 @@ function showToastMessage(message) {
 	$(".toast").toast('show');
 }
 
-function noSelect() {
+function noSelectCountry(){
 	buttonAddCountry.val("Thêm mới");
 	labelCountryName.text("Tên quốc gia: ");
 	buttonUpdateCountry.prop("disabled", true);
 	buttonDeleteCountry.prop("disabled", true);
-	fieldCountryCode.val("");
-	fieldCountryName.val("");
-	
+	fieldCountryCode.val("").prop("disabled", true);
+	fieldCountryName.val("").prop("disabled", true);
 }

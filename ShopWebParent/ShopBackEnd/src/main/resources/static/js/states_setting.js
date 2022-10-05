@@ -18,10 +18,12 @@ $(document).ready(function() {
 	buttonDeleteState = $("#buttonDeleteState");
 
 	buttonLoad4State.click(function() {
-		loadCountries4State();
+			loadCountries4State();
+			noSelectState();
 	});
 	dropDownCountry4State.on("change", function() {
 		changeDropDownStates();
+		noSelectState();
 	});
 	dropDownStates.on("change", function() {
 		changeFormStateToSelectedState();
@@ -45,10 +47,15 @@ $(document).ready(function() {
 function deleteState() {
 	stateId = dropDownStates.val();
 	url = contextPath + "states/delete/" + stateId;
-	$.get(url, function() {
-		$("#dropDownStates option[value='" + stateId + "']").remove();
-		noSelect();
+	$.ajax({
+		type: 'DELETE',
+		url: url,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(csrfHeaderName, csrfValue);
+		}	
 	}).done(function() {
+		$("#dropDownStates option[value='" + stateId + "']").remove();
+		noSelectState();
 		showToastMessage("Thông tin thành phố đã được xóa.");
 	}).fail(function() {
 		showToastMessage("Lỗi: Không thể kết nối đến máy chủ hoặc máy chủ gặp lỗi.");
@@ -78,7 +85,6 @@ function updateState() {
 		$("#dropDownStates option:selected").val(stateId);
 		$("#dropDownStates option:selected").text(stateName);
 		showToastMessage("Thông tin thành phố đã được cập nhật.");
-		//changeFormStateToNew();
 	}).fail(function() {
 		showToastMessage("Lỗi: Không thể kết nối đến máy chủ hoặc máy chủ gặp lỗi.");
 	});
@@ -113,7 +119,11 @@ function addState() {
 function selectNewlyAddedState(stateId, stateName) {
 	$("<option>").val(stateId).text(stateName).appendTo(dropDownStates);
 	$("#dropDownStates option[value='" + stateId + "']").prop("selected", true);
-	fieldStateName.val("").focus;
+	fieldStateName.val(stateName).focus();
+	buttonAddState.prop("value", "Thêm mới");
+	buttonUpdateState.prop("disabled", false);
+	buttonDeleteState.prop("disabled", false);
+	labelStateName.text("Tên Tình thành/Bang (đang chọn): ")
 }
 
 function changeFormStateToNew() {
@@ -122,7 +132,7 @@ function changeFormStateToNew() {
 	buttonUpdateState.prop("disabled", true);
 	buttonDeleteState.prop("disabled", true);
 
-	fieldStateName.val("").focus();
+	fieldStateName.val("").prop("disabled", false).focus();
 }
 
 
@@ -133,7 +143,7 @@ function changeFormStateToSelectedState() {
 
 	labelStateName.text("Tên thành phố (đang chọn): ")
 	selectedStateName = $("#dropDownStates option:selected").text();
-	fieldStateName.val(selectedStateName);
+	fieldStateName.val(selectedStateName).prop("disabled", false).focus();
 
 }
 
@@ -177,10 +187,10 @@ function showToastMessage(message) {
 	$("#toastMessage").text(message);
 	$(".toast").toast('show');
 }
-function noSelect() {
-	buttonAddState.prop("value", "Thêm mới");
+function noSelectState() {
+	buttonAddState.val("Thêm mới").prop("disabled", false);
 	buttonUpdateState.prop("disabled", true);
 	buttonDeleteState.prop("disabled", true);
-	fieldStateName.val("");
+	fieldStateName.val("").prop("disabled", true);
 	labelStateName.text("Tên thành phố: ");
 }
