@@ -74,12 +74,13 @@
 		
 		$(document).ready(function() {
 			dropdownCategories = $("#categories");
-			divChosenCategories = $("#chosenCategories")
+			divChosenCategories = $("#chosenCategories");
 			
 			dropdownCategories.change(function(){
 				divChosenCategories.empty();
 				showChosenCategories();
 			});
+			showChosenCategories();
 		});
 		
 		function showChosenCategories(){
