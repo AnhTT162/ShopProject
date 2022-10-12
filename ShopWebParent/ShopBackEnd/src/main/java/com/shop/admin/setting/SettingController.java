@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -83,6 +84,24 @@ public class SettingController {
 			}
 		}
 		service.saveAll(listSettings);
+	}
+	
+	@PostMapping("/settings/save_mail_server")
+	public String saveMailServerSettings(HttpServletRequest request, RedirectAttributes ra) {
+		List<Setting> mailServerSettings = service.getMailServerSettings();
+		updateSettingValuesFromForm(request, mailServerSettings);
+		
+		ra.addFlashAttribute("message", "Cài đặt Mail Server đã được lưu.");
+		return "redirect:/settings";
+	}
+	
+	@PostMapping("/settings/save_mail_templates")
+	public String saveMailTemplateSettings(HttpServletRequest request, RedirectAttributes ra) {
+		List<Setting> mailTemplateSettings = service.getMailTemplateSettings();
+		updateSettingValuesFromForm(request, mailTemplateSettings);
+		
+		ra.addFlashAttribute("message", "Cài đặt Mail Templates đã được lưu.");
+		return "redirect:/settings";
 	}
 
 }

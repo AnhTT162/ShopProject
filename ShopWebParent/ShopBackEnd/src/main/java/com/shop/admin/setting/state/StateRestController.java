@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.common.entity.Country;
 import com.shop.common.entity.State;
+import com.shop.common.entity.StateDTO;
 
 @RestController
 public class StateRestController {

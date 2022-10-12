@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: header_menu"></div>
+		<div>&nbsp;</div>
+		<div class="text-center">
+			<h1>Đăng ký tài khoản</h1>
+		</div>
+
+		<form th:action="@{/create_customer}" method="post"
+			th:object="${customer}"
+			style="max-width: 600px; margin: 0 auto"
+			onsubmit="return checkEmailUnique(this);">
+			<div class="border border-secondary rounded p-3">
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Họ:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{firstName}" class="form-control" 
+						required="required" maxlength="45" minlength="2"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Tên:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{lastName}" class="form-control" 
+						required="required" maxlength="45" minlength="2"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Email:</label>
+					<div class="col-sm-8">
+						<input type="email" th:field="*{email}" class="form-control" 
+						required="required" maxlength="45" minlength="8"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Mật khẩu:</label>
+					<div class="col-sm-8">
+						<input type="password" th:field="*{password}" class="form-control" 
+						required="required" maxlength="15" minlength="6"
+						oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Nhập lại mật khẩu:</label>
+					<div class="col-sm-8">
+						<input type="password" id="confirmPassword" class="form-control" 
+						required="required" maxlength="15" minlength="6"
+						oninput="checkPasswordMatch(this)"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Số điện thoại:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{phoneNumber}" class="form-control" 
+						required="required" maxlength="15" minlength="8"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Địa chỉ 1:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{addressLine1}" class="form-control" 
+						required="required" maxlength="64" minlength="3"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Địa chỉ 2 (Tùy chọn):</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{addressLine2}" class="form-control" 
+						maxlength="64"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Quận/Huyện:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{city}" class="form-control" 
+						maxlength="64"/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Quốc gia:</label>
+					<div class="col-sm-8">
+						<select class="form-control" th:field="*{country}">
+							<th:block th:each="country : ${listAllCountries}">
+								<option th:value="${country.id}">[[${country.name}]]</option>
+							</th:block>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Tỉnh/Thành phố:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{state}" class="form-control" 
+						maxlength="64" minlength="3" list="listStates"/>
+						<datalist id="listStates"></datalist>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-4 col-form-label">Mã bưu điện:</label>
+					<div class="col-sm-8">
+						<input type="text" th:field="*{postalCode}" class="form-control" 
+						maxlength="10" minlength="2"/>
+					</div>
+				</div>
+				<div class="text-center">
+					<input type="submit" value="Đăng ký" class="btn btn-primary"/>
+				</div>
+			</div>
+		</form>
+		<div>&nbsp;</div>
+		<div th:replace="fragments :: modal_dialog"></div>
+		<div th:replace="navigation :: footer_menu"></div>
+	</div>
+	<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	var dropDownCountry;
+	var dataListStates;
+	var fieldState;
+	$(document).ready(function(){
+		dropDownCountry = $("#country");
+		dataListStates = $("#listStates");
+		fieldState = $("#state");
+		dropDownCountry.on("change", function(){
+			loadStatesByCountry();
+			fieldState.val("").focus();
+		});
+	});
+	function loadStatesByCountry(){
+		selectedCountry = $("#country option:selected");
+		countryId = selectedCountry.val();
+		url = contextPath + "settings/list_states_by_country/" + countryId;
+		
+		$.get(url, function(responseJSON){
+			dataListStates.empty();
+			
+			$.each(responseJSON, function(index, state){
+				$("<option>").val(state.name).text(state.name).appendTo(dataListStates);
+			})
+		});
+	};
+	function checkPasswordMatch(confirmPassword) {
+		if (confirmPassword.value != $("#password").val()) {
+			confirmPassword.setCustomValidity("Mật khẩu không trùng khớp");
+		} else {
+			confirmPassword.setCustomValidity("");
+		}
+	};
+	function checkEmailUnique(form) {
+		url = contextPath +  "customers/check_unique_email";
+		customerEmail = $("#email").val();
+		csrfValue = $("input[name='_csrf']").val();
+		params = {email: customerEmail, _csrf: csrfValue};
+
+		$.post(url, params, function(response) {
+			if (response == "OK") {
+				form.submit();
+			} else if (response == "Duplicated") {
+				showWarningModal("Email: \"" + customerEmail + "\" đã tồn tại");
+			} else {
+				showErrorModal("Phản hồi không xác định từ máy chủ");
+			}
+		}).fail(function() {
+			showErrorModal("Không thể kết nối tới máy chủ");
+		});
+
+		return false;
+	}
+	function showModalDialog(title, message) {
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message);
+		$("#modalDialog").modal();
+
+	}
+
+	function showErrorModal(message) {
+		showModalDialog("Lỗi", message);
+	}
+	function showWarningModal(message) {
+		showModalDialog("Cảnh báo", message);
+	}
+
+	</script>
+</body>
+</html>
