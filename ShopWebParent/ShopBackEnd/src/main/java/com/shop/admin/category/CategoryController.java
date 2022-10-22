@@ -102,15 +102,15 @@ public class CategoryController {
 			return "redirect:/categories";
 		}
 	}
-	@GetMapping("/categories/{id}/enabled/{status}/{pageNum}/{sort}")
-	public String updateCategoryEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled,@PathVariable("pageNum") Integer pageNum,
-			@PathVariable("sort") String sort,
-			RedirectAttributes redirectAttributes) {
-		service.updateCategoryEnabledStatus(id, enabled);
-		String status = enabled ? " đã được kích hoạt!" : " đã bị vô hiệu hóa!";
-		String message = "Danh mục có ID: " + id + status;
-		redirectAttributes.addFlashAttribute("message", message);
-		return "redirect:/categories/page/{pageNum}?" + sort;
+	@GetMapping("/categories/{id}/enabled/{status}/{pageNum}")
+	public String updateCategoryEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
+			Model model) {
+		service.updateCategoryEnabledStatus(id, status);
+		String catStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";
+		String message = "Danh mục có ID: " + id + catStatus; 
+		model.addAttribute("message", message);	
+		return listByPage(pageNum, sortDir, keyword, model);
 		
 	}
 	@GetMapping("/categories/delete/{id}")

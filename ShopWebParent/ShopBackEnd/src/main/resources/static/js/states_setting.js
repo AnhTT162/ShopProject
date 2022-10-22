@@ -63,6 +63,7 @@ function deleteState() {
 }
 
 function updateState() {
+	if(!validateFormState()) return;
 	url = contextPath + "states/save";
 	stateName = fieldStateName.val();
 	stateId = dropDownStates.val();
@@ -90,7 +91,17 @@ function updateState() {
 	});
 }
 
+function validateFormState(){
+	formState = document.getElementById("formState");
+	if(!formState.checkValidity()){
+		formState.reportValidity();
+		return false;
+	}
+	return true;
+}
+
 function addState() {
+	if(!validateFormState()) return;
 	url = contextPath + "states/save";
 	stateName = fieldStateName.val();
 

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Quản lý khách hàng', 'none')" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: menu"></div>
+		<div>
+			<h2>Quản lý khách hàng</h2>
+		</div>
+		<div>
+			<form th:action="@{/customers/page/1}" class="form-inline m-3"
+				id="searchForm">
+				<input type="hidden" name="sortField" th:value="${sortField}" /> 
+				<input type="hidden" name="sortDir" th:value="${sortDir}" />
+				&nbsp;
+				Tìm kiếm:
+				&nbsp; 
+				<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
+				&nbsp;&nbsp;
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-search"></i>
+				</button>
+				&nbsp;
+				&nbsp;
+				<button type="button" class="btn btn-secondary" onclick="clearFilter()">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+			</form>
+			<div th:if="${message != null}"
+				class="alert alert-success text-center">[[${message}]]</div>
+		</div>
+
+		<div>
+			<div class="full-details">
+				<table
+					class="table table-bordered table-striped table-hover table-responsice-xl">
+					<thead class="thead-dark">
+						<tr>
+
+							<th
+								th:replace="fragments :: column_link('/customers', 'id', 'ID', 'none')" />
+
+
+
+							<th
+								th:replace="fragments :: column_link('/customers', 'firstName', 'Họ', 'none')" />
+
+
+							<th
+								th:replace="fragments :: column_link('/customers', 'lastName', 'Tên', 'none')" />
+
+							<th class="hideable-column">
+							<th
+								th:replace="fragments :: column_link('/customers', 'email', 'Email', 'tag')" />
+							<th class="hideable-column">
+							<th
+								th:replace="fragments :: column_link('/customers', 'city', 'Quận/Huyện', 'tag')" />
+							<th class="hideable-column">
+							<th
+								th:replace="fragments :: column_link('/customers', 'state', 'Tỉnh/Thành phố', 'tag')" />
+
+							<th
+								th:replace="fragments :: column_link('/customers', 'country', 'Quốc gia', 'none')" />
+
+							<th
+								th:replace="fragments :: column_link('/customers', 'enabled', 'Kích hoạt', 'none')" />
+
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="cus : ${listCustomers}">
+							<td>[[${cus.id}]]</td>
+
+							<td>[[${cus.firstName}]]</td>
+
+							<td>[[${cus.lastName}]]</td>
+							<td class="hideable-column">[[${cus.email}]]</td>
+							<td class="hideable-column">[[${cus.city}]]</td>
+							<td class="hideable-column">[[${cus.state}]]</td>
+							<td>[[${cus.country.name}]]</td>
+
+							<td>
+								<div
+									th:replace="fragments :: status(${cus.enabled}, 'sản phẩm', '/customers/' + ${cus.id})"></div>
+							</td>
+
+
+							<td><a class="fas fa-file-alt fa-2x icon-black link-detail"
+								th:href="@{'/customers/detail/' + ${cus.id}}"
+								title="Xem chi tiết sản phẩm này"></a> &nbsp;
+								<div
+									th:replace="fragments :: edit('khách hàng', '/customers/edit/' + ${cus.id})"></div>
+								&nbsp;
+								<div
+									th:replace="fragments :: delete('khách hàng', ${cus.id}, '/customers/delete/' + ${cus.id}, true)"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="less-details">
+			<div th:each="cus : ${listCustomers}" class="row m-1">
+				<div class="col-4">
+					<span><b>[[${cus.fullName}]]</b></span>
+				</div>
+				<div class="col-8">
+					<div class="mb-1">
+						<span>[[${cus.country.name}]]</span>
+					</div>
+					<div>
+						<div
+							th:replace="fragments :: status(${cus.enabled}, 'sản phẩm', '/customers/' + ${cus.id})"></div>
+						&nbsp; <a class="fas fa-file-alt fa-2x icon-black link-detail"
+							th:href="@{'/products/detail/' + ${cus.id}}"
+							title="Xem chi tiết sản phẩm này"></a> &nbsp;
+						<div
+							th:replace="fragments :: edit('sản phẩm', '/products/edit/' + ${cus.id})"></div>
+						&nbsp;
+						<div
+							th:replace="fragments :: delete('sản phẩm', ${cus.id}, '/products/delete/' + ${cus.id}, true)"></div>
+					</div>
+				</div>
+				<div>&nbsp;</div>
+			</div>
+		</div>
+
+		<div th:replace="fragments :: pagination('/customers', 'khách hàng')"></div>
+
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+
+		<div class="modal fade" id="detailModal">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content"></div>
+			</div>
+		</div>
+
+		<div th:replace="fragments :: footer"></div>
+	</div>
+	<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/customers}]]";
+		$(document).ready(
+				function() {
+					$(".link-delete").on("click", function(e) {
+						e.preventDefault();
+						showDeleteConfirmModal($(this), 'khách hàng');
+					});
+
+					$(".link-detail").on(
+							"click",
+							function(e) {
+								e.preventDefault();
+								linkDetailURL = $(this).attr("href");
+								$("#detailModal").modal("show").find(
+										".modal-content").load(linkDetailURL);
+							});
+					$("#dropdownCategory").on("change", function() {
+						$("#searchForm").submit();
+					});
+				});
+	</script>
+</body>
+</html>

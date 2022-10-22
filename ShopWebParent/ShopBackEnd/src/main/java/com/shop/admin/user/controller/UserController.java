@@ -127,15 +127,15 @@ public class UserController {
 		return "redirect:/users";
 	}
 	
-	@GetMapping("/users/{id}/enabled/{status}/{pageNum}/{sort}")
-	public String updateUserEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled, @PathVariable("pageNum") Integer pageNum,
-			@PathVariable("sort") String sort,
-			RedirectAttributes redirectAttributes) {
-		service.updateUserEnabledStatus(id, enabled);
-		String status = enabled ? " đã được kích hoạt!" : " đã bị vô hiệu hóa!";
-		String message = "Tài khoản có ID: " + id + status;
-		redirectAttributes.addFlashAttribute("message", message);
-		return "redirect:/users/page/{pageNum}?" + sort;
+	@GetMapping("/users/{id}/enabled/{status}/{pageNum}")
+	public String updateUserEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
+			Model model) {
+		service.updateUserEnabledStatus(id, status);
+		String userStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";
+		String message = "Tài khoản có ID: " + id + userStatus; 
+		model.addAttribute("message", message);	
+		return listByPage(pageNum, model, sortField, sortDir, keyword);
 		
 	}
 	

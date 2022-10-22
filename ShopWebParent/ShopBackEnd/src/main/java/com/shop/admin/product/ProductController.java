@@ -215,15 +215,15 @@ public class ProductController {
 		}
 	}
 
-	@GetMapping("/products/{id}/enabled/{status}/{pageNum}/{sort}")
-	public String updateProductEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled,
-			@PathVariable("pageNum") Integer pageNum, @PathVariable("sort") String sort,
-			RedirectAttributes attributes) {
-		productService.updateProductEnabledStatus(id, enabled);
-		String status = enabled ? " đã được kích hoạt!" : " đã bị vô hiệu hóa!";
-		String message = "Sản phẩm có ID: " + id + status;
-		attributes.addFlashAttribute("message", message);
-		return "redirect:/products/page/{pageNum}?" + sort;
+	@GetMapping("/products/{id}/enabled/{status}/{pageNum}")
+	public String updateProductEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
+			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
+			@Param("categoryId") Integer categoryId, Model model) {
+		productService.updateProductEnabledStatus(id, status);
+		String proStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";
+		String message = "Sản phẩm có ID: " + id + proStatus; 
+		model.addAttribute("message", message);	
+		return listByPage(pageNum, sortField, sortDir, keyword, categoryId, model);
 	}
 
 	@GetMapping("/products/delete/{id}")

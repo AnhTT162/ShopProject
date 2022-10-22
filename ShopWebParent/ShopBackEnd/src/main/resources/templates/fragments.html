@@ -34,11 +34,11 @@
 		th:remove="tag">
 		<a th:if="${enabled == true}"
 			class="fa-solid fa-circle-check fa-2x icon-black"
-			th:href="@{${entityURL} + '/enabled/false/'+ ${currentPage} + '/'  + ${keyword != null ? 'sortField=' + sortField + '&sortDir=' + sortDir + '&keyword=' + keyword : 'sortField=' + sortField + '&sortDir=' + sortDir}}"
+			th:href="@{${entityURL} + '/enabled/false/'+ ${currentPage} + '?'  + ${keyword != null ? 'sortField=' + sortField + '&sortDir=' + sortDir + '&keyword=' + keyword : 'sortField=' + sortField + '&sortDir=' + sortDir} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}"
 			th:title="'Vô hiệu hóa ' + ${entityName} + ' này'"></a> <a
 			th:if="${enabled == false}"
 			class="fa-solid fa-circle fa-2x icon-silver"
-			th:href="@{${entityURL} + '/enabled/true/'+ ${currentPage} + '/' + ${keyword != null ? 'sortField=' + sortField + '&sortDir=' + sortDir + '&keyword=' + keyword : 'sortField=' + sortField + '&sortDir=' + sortDir}}"
+			th:href="@{${entityURL} + '/enabled/true/'+ ${currentPage} + '?' + ${keyword != null ? 'sortField=' + sortField + '&sortDir=' + sortDir + '&keyword=' + keyword : 'sortField=' + sortField + '&sortDir=' + sortDir} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}"
 			th:title="'Kích hoạt ' + ${entityName} + ' này'"></a>
 	</div>
 
@@ -67,7 +67,7 @@
 		<div class="text-center m-1" th:unless="${totalItems>0}">
 			<span>Không tồn tại [[${entityName}]] nào</span>
 		</div>
-		<div th:if="${totalItems > 4}" )>
+		<div>
 			<nav>
 				<ul class="pagination justify-content-center flex-wrap">
 					<li
