@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,11 +36,8 @@ public class Customer {
 	@Column(name = "phone_number", nullable = false, length = 45)
 	private String phoneNumber;
 	
-	@Column(name = "address_line_1", nullable = false, length = 64)
-	private String addressLine1;
-	
-	@Column(name = "address_line_2", length = 64)
-	private String addressLine2;
+	@Column(name = "address", nullable = false, length = 64)
+	private String address;
 	
 	@Column(nullable = false, length = 64)
 	private String city;
@@ -61,6 +60,11 @@ public class Customer {
 	@JoinColumn(name = "country_id")
 	private Country country;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "authentication_type", length = 10)
+	private AuthenticationType authenticationType;
+	
+
 	public Customer() {
 	}
 
@@ -112,20 +116,12 @@ public class Customer {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
-	}
-
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getCity() {
@@ -182,6 +178,14 @@ public class Customer {
 
 	public void setCountry(Country country) {
 		this.country = country;
+	}
+
+	public AuthenticationType getAuthenticationType() {
+		return authenticationType;
+	}
+
+	public void setAuthenticationType(AuthenticationType authenticationType) {
+		this.authenticationType = authenticationType;
 	}
 
 	@Override

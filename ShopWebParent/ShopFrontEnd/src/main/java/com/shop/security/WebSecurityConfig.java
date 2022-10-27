@@ -1,5 +1,6 @@
 package com.shop.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,32 +12,45 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.shop.security.oauth.CustomerOAuth2UserService;
+import com.shop.security.oauth.OAuth2LoginSuccessHandler;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired private CustomerOAuth2UserService oauth2UserService;
+	@Autowired private OAuth2LoginSuccessHandler oauth2LoginHandler;
+	
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	public static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/customer").authenticated()
-		.anyRequest().permitAll()
-		.and()
-		.formLogin()
-			.loginPage("/login")
-			.usernameParameter("email")
-			.permitAll()
-		.and()
-		.logout().permitAll()
-		.and()
-		.rememberMe()
-			.key("1234567890_aBcDeFgHiJkLmNoPqRsTuVwXyZ")
-			.tokenValiditySeconds(14 * 24 * 60 * 60)
-			;
+			.antMatchers("/customer").authenticated()
+			.anyRequest().permitAll()
+			.and()
+			.formLogin()
+				.loginPage("/login")
+				.usernameParameter("email")
+				.permitAll()
+			.and()
+			.oauth2Login()
+				.loginPage("/login")
+				.userInfoEndpoint()
+				.userService(oauth2UserService)
+				.and()
+				.successHandler(oauth2LoginHandler)
+			.and()
+			.logout().permitAll()
+			.and()
+			.rememberMe()
+				.key("1234567890_aBcDeFgHiJkLmNoPqRsTuVwXyZ")
+				.tokenValiditySeconds(14 * 24 * 60 * 60)
+				;
 	}
 
 	@Override
@@ -51,12 +65,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		
-		authenticationProvider.setUserDetailsService(userDetailsService());
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		authProvider.setUserDetailsService(userDetailsService());
+		authProvider.setPasswordEncoder(passwordEncoder());
 		
-		return authenticationProvider;
+		return authProvider;
 	}
 
 }

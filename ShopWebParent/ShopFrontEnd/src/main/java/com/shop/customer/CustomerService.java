@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.shop.common.entity.AuthenticationType;
 import com.shop.common.entity.Country;
 import com.shop.common.entity.Customer;
 import com.shop.setting.country.CountryRepository;
@@ -19,16 +20,16 @@ import net.bytebuddy.utility.RandomString;
 @Transactional
 public class CustomerService {
 
-	@Autowired private CustomerRepository customerRepository;
-	@Autowired private CountryRepository countryRepository;
+	@Autowired private CustomerRepository customerRepo;
+	@Autowired private CountryRepository countryRepo;
 	@Autowired PasswordEncoder passwordEncoder;
 	
 	public List<Country> listAllCountries() {
-		return countryRepository.findAllByOrderByNameAsc();
+		return countryRepo.findAllByOrderByNameAsc();
 	}
 	
 	public boolean isEmailUnique(String email) {
-		Customer customer = customerRepository.findByEmail(email);
+		Customer customer = customerRepo.findByEmail(email);
 		return customer == null;
 	}
 	
@@ -36,11 +37,16 @@ public class CustomerService {
 		encodePassword(customer);
 		customer.setEnabled(false);
 		customer.setCreatedTime(new Date());
+		customer.setAuthenticationType(AuthenticationType.DATABASE);
 		
 		String randomCode = RandomString.make(64);
 		customer.setVerificationCode(randomCode);
 		
-		customerRepository.save(customer);
+		customerRepo.save(customer);
+	}
+	
+	public Customer getCustomerByEmail(String email) {
+		return customerRepo.findByEmail(email);
 	}
 
 	private void encodePassword(Customer customer) {
@@ -49,13 +55,55 @@ public class CustomerService {
 	}
 	
 	public boolean verify(String verificationCode) {
-		Customer customer = customerRepository.findByVerificationCode(verificationCode);
+		Customer customer = customerRepo.findByVerificationCode(verificationCode);
 		
 		if(customer == null || customer.isEnabled()) {
 			return false;
 		} else {
-			customerRepository.enable(customer.getId());
+			customerRepo.enable(customer.getId());
 			return true;
 		}
+	}
+	
+	public void updateAuthenticationType(Customer customer, AuthenticationType type) {
+		if(!customer.getAuthenticationType().equals(type)) {
+			customerRepo.updateAuthenticationType(customer.getId(), type);
+		}
+	}
+	public void addNewCustomerUponOAuthLogin(String name, String email, String countryCode, AuthenticationType type) {
+		Customer customer = new Customer();
+		customer.setEmail(email);
+		
+		setName(name, customer);
+		
+		customer.setEnabled(true);
+		customer.setCreatedTime(new Date());
+		customer.setAuthenticationType(type);
+		customer.setPassword("");
+		customer.setAddress("");
+		customer.setCity("");
+		customer.setState("");
+		customer.setPhoneNumber("");
+		customer.setPostalCode("");
+		customer.setCountry(countryRepo.findByCode(countryCode));
+		
+		customerRepo.save(customer);
+	}
+
+	private void setName(String name, Customer customer) {
+		String[] nameArray = name.split(" ");
+		if(nameArray.length < 2) {
+			customer.setFirstName("");
+			customer.setLastName(name);
+		} else {
+			String firstName = nameArray[0];
+			customer.setFirstName(firstName);
+			
+			
+			String lastName = name.replaceFirst(firstName + " ", "");
+			customer.setLastName(lastName);
+			
+		}
+		
 	}
 }

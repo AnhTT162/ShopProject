@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
-<title>Login - Shop Admin</title>
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-</head>
+<head th:replace="fragments :: page_head('Đăng nhập', 'none')" />
 <body>
 	<div class="container-fluid text-center">
 		<div th:replace="navigation :: header_menu"></div>
 		<div>&nbsp;</div>
-		<div>
+		<div class="m-3">
 			<h2>Đăng nhập</h2>
 		</div>
 
-		<form th:action="@{/login}" method="post" class="mt-5"
-			style="max-width: 350px; margin: 0 auto">
+		<form th:action="@{/login}" method="post"
+			style="max-width: 500px; margin: 0 auto">
 			<div th:if="${param.error}">
-				<p class="text-danger">Tên tài khoản hoặc mật khẩu không đúng. (Hoặc tài khoản bị vô hiệu hóa)</p>
+				<p class="text-danger">Thông tin đăng nhập không chính xác. <br /> (Hoặc tài khoản bị vô hiệu hóa)</p>
 			</div>
 			<div th:if="${param.logout}">
 				<p class="text-warning">Bạn đã đăng xuất.</p>
 			</div>
 			<div class="border border-secondary rounded p-3">
 
-				<p>
-					<input type="email" name="email" class="form-control"
-						placeholder="E-mail" required />
-				</p>
-				<p>
-					<input type="password" name="password" class="form-control"
-						placeholder="Mật khẩu" required />
-				</p>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">Tài khoản:</label>
+					<div class="col-sm-9">
+						<input type="email" name="email" class="form-control" required />
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">Mật khẩu:</label>
+					<div class="col-sm-9">
+						<input type="password" name="password" class="form-control"
+							required />
+					</div>
+				</div>
+
 				<p>
 					<input type="checkbox" name="remember-me" />&nbsp;Duy trì đăng
 					nhập
@@ -41,8 +42,22 @@
 				<p>
 					<input type="submit" value="Đăng nhập" class="btn btn-primary" />
 				</p>
+				<hr class="hr" />
+				hoặc tiếp tục với:
+				<div>&nbsp;</div>
+				<div class="text-center">
+					<a class="btn btn-lg btn-secondary fa-brands fa-google"
+						th:href="@{/oauth2/authorization/google}"></a> <a
+						class="btn btn-lg btn-secondary fa-brands fa-facebook"
+						th:href="@{/oauth2/authorization/facebook}"></a>
+				</div>
 			</div>
 		</form>
+		<div>&nbsp;</div>
+		<div>
+			Không có tài khoản nào? <a th:href="@{/register}"><b>Đăng ký
+					tài khoản mới.</b></a>
+		</div>
 		<div>&nbsp;</div>
 		<div th:replace="navigation :: footer_menu"></div>
 	</div>

@@ -1,0 +1,33 @@
+server:
+  port: 80
+  servlet:
+    context-path: /Shop
+spring:
+  datasource:
+    password: 1602
+    url: jdbc:mysql://localhost:3306/shopdb
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 981954614027-0bi3kim08ja4u4veo638h17j3coridti.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
+          facebook:
+            client-id: 1054629045232487
+            client-secret: f117b9506f2d5fdd4a2104b8f3623ee0
+            scope:
+            - email
+            - public_profile

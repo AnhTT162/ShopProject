@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import com.shop.common.entity.AuthenticationType;
 import com.shop.common.entity.Country;
 import com.shop.common.entity.Customer;
 import com.shop.customer.CustomerRepository;
@@ -41,8 +42,8 @@ public class CustomerRepositoryTests {
 		customer.setCountry(country);
 		customer.setState("Hà Nội");
 		customer.setCity("Hai Bà Trưng");
-		customer.setAddressLine1("36 Chùa Liên Phái, Cầu Dền");
-		customer.setAddressLine2("");
+		customer.setAddress("36 Chùa Liên Phái, Cầu Dền");
+
 		customer.setPostalCode("112200");
 		customer.setCreatedTime(new Date());
 		
@@ -66,8 +67,8 @@ public class CustomerRepositoryTests {
 		customer.setCountry(country);
 		customer.setState("Hà Nội");
 		customer.setCity("Cầu Giấy");
-		customer.setAddressLine1("445 Nguyễn Khang, Yên Hòa");
-		customer.setAddressLine2("");
+		customer.setAddress("445 Nguyễn Khang, Yên Hòa");
+
 		customer.setPostalCode("122000");
 		customer.setCreatedTime(new Date());
 		
@@ -91,8 +92,8 @@ public class CustomerRepositoryTests {
 		customer.setCountry(country);
 		customer.setState("Hà Nội");
 		customer.setCity("Đống Đa");
-		customer.setAddressLine1("1 Xã Đàn");
-		customer.setAddressLine2("");
+		customer.setAddress("1 Xã Đàn");
+
 		customer.setPostalCode("123000");
 		customer.setCreatedTime(new Date());
 		customer.setVerificationCode("1234");
@@ -177,6 +178,16 @@ public class CustomerRepositoryTests {
 		Customer enabledCustomer = repo.findById(customerId).get();
 		
 		assertThat(enabledCustomer.isEnabled()).isTrue();
+		
+	}
+	
+	@Test
+	public void testUpdateAuthenticationType() {
+		Integer id = 1;
+		repo.updateAuthenticationType(id, AuthenticationType.DATABASE);
+		
+		Customer customer = repo.findById(id).get();
+		assertThat(customer.getAuthenticationType()).isEqualTo(AuthenticationType.FACEBOOK);
 		
 	}
 

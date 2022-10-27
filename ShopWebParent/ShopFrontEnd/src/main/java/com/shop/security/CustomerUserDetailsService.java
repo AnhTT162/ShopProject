@@ -10,7 +10,7 @@ import com.shop.customer.CustomerRepository;
 
 public class CustomerUserDetailsService implements UserDetailsService {
 	
-	@Autowired CustomerRepository repo;
+	@Autowired private CustomerRepository repo;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
