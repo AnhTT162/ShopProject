@@ -44,6 +44,7 @@
 							<input type="password" th:field="*{password}"
 								class="form-control"
 								placeholder="Để trống nếu không muốn thay đổi mật khẩu!"
+								autocomplete="new-password"
 								minlength="8" maxlength="20"
 								oninput="checkPasswordMatch(document.getElementById('confirmPassword'))" />
 						</div>

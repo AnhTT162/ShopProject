@@ -13,7 +13,10 @@
 		<form th:action="@{/login}" method="post"
 			style="max-width: 500px; margin: 0 auto">
 			<div th:if="${param.error}">
-				<p class="text-danger">Thông tin đăng nhập không chính xác. <br /> (Hoặc tài khoản bị vô hiệu hóa)</p>
+				<p class="text-danger">
+					Thông tin đăng nhập không chính xác. <br /> (Hoặc tài khoản bị vô
+					hiệu hóa)
+				</p>
 			</div>
 			<div th:if="${param.logout}">
 				<p class="text-warning">Bạn đã đăng xuất.</p>
@@ -54,6 +57,9 @@
 			</div>
 		</form>
 		<div>&nbsp;</div>
+		<div>
+			<a th:href="@{/forgot_password}"><b>Quên mật khẩu.</b></a>
+		</div>
 		<div>
 			Không có tài khoản nào? <a th:href="@{/register}"><b>Đăng ký
 					tài khoản mới.</b></a>
