@@ -13,63 +13,65 @@
 			<div class="collapse navbar-collapse" id="topNavbar">
 				<ul class="navbar-nav mr-auto">
 
-					<li class="nav-item"><a class="nav-link" href="">Nghề
-							nghiệp</a></li>
+					<li class="nav-item"><a class="nav-link" href="">Tuyển dụng</a></li>
 					<li class="nav-item"><a class="nav-link" href="">Thanh
 							toán</a></li>
 					<li class="nav-item"><a class="nav-link" href="">Giao hàng
 							&amp; Vận chuyển</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/login}">Đăng nhập</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/register}">Đăng ký</a></li>
 					<li class="nav-item"><a class="nav-link" href="">Liên hệ</a></li>
 				</ul>
+				<th:block sec:authorize ="!isAuthenticated()">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" th:href="@{/login}">Đăng
+							nhập</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/register}">Đăng ký</a></li>
+					
+				</ul>
+				</th:block>
 			</div>
 		</nav>
 	</div>
 	<div th:fragment="search_nav" class="row">
 		<div class="col-md">
-		
+
 			<th:block sec:authorize="isAuthenticated()">
-				<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+				<form th:action="@{/logout}" method="post" th:hidden="true"
+					name="logoutForm">
 					<input type="submit" value="Đăng xuất" />
 				</form>
 			</th:block>
-		
+
 			<nav class="navbar navbar-expand-sm bg-light">
 				<div class="collapse navbar-collapse" id="searchNavbar">
 					<form class="form-inline" th:action="@{/search}" method="get">
-						<input type="search" name="keyword" class="form-control mr-sm-2" 
-						th:value="${keyword}"
-						placeholder="Từ khóa" required/>
-						<input type="submit" class="btn btn-outline-success" value="Tìm kiếm"/>
+						<input type="search" name="keyword" class="form-control mr-sm-2"
+							th:value="${keyword}" placeholder="Từ khóa" required /> <input
+							type="submit" class="btn btn-outline-success" value="Tìm kiếm" />
 					</form>
-					<ul class="navbar-nav">
-						<th:block sec:authorize="isAuthenticated()">
-						<li class="nav-item">
-							<b><a class="nav-link" th:href="@{/account_details}"
-								sec:authentication="principal.fullName"></a></b>
-						</li>
-						
-						<li class="nav-item">
-							<a class="nav-link" href="">Addresses</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="">Questions</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="">Reviews</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="">Orders</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="">Cart</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="javascript: document.logoutForm.submit()">Đăng xuất</a>
-						</li>
-						</th:block>
-					</ul>
+					<th:block sec:authorize="isAuthenticated()">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item"><a
+								class="nav-link fas fa-shopping-cart fa-2x" th:href="@{/cart}"></a>
+							</li>
+							
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown"
+								sec:authentication="principal.fullName"></a>
+								<div class="dropdown-menu">
+									<a class="dropdown-item" th:href="@{/account_details}">Thông
+										tin cá nhân</a>
+									<a class="dropdown-item" th:href="@{/address_book}">Sổ địa chỉ</a>
+									<a class="dropdown-item" href="">Questions</a>
+									<a class="dropdown-item" href="">Reviews</a>
+									<a class="dropdown-item" href="">Orders</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="javascript: document.logoutForm.submit()"
+										style="color: red;">Đăng xuất</a>
+								</div></li>
+							<li><span class="fas fa-user fa-2x icon-black"></span></li>
+						</ul>
+					</th:block>
 				</div>
 			</nav>
 		</div>

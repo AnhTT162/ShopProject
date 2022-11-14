@@ -25,13 +25,13 @@ public class CategoryController {
 	private CategoryService service;
 	
 	@GetMapping("/categories")
-	public String listFirstPage(@Param("sortDir") String sortDir,Model model) {
+	public String listFirstPage(String sortDir,Model model) {
 		return listByPage(1, sortDir, null, model);
 	}
 	
 	@GetMapping("/categories/page/{pageNum}")
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum,
-			@Param("sortDir") String sortDir,@Param("keyword") String keyword, Model model) {
+			String sortDir,String keyword, Model model) {
 		if (sortDir == null || sortDir.isEmpty()) {
 			sortDir = "asc" ;
 		}
@@ -104,7 +104,7 @@ public class CategoryController {
 	}
 	@GetMapping("/categories/{id}/enabled/{status}/{pageNum}")
 	public String updateCategoryEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
+			String sortField, String sortDir, String keyword,
 			Model model) {
 		service.updateCategoryEnabledStatus(id, status);
 		String catStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";

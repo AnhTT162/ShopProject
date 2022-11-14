@@ -35,8 +35,7 @@ public class UserController {
 	
 	@GetMapping("/users/page/{pageNum}")
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir,
-			@Param("keyword") String keyword) {
+			String sortField, String sortDir, String keyword) {
 		
 		Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
 		List<User> listUsers = page.getContent();
@@ -93,7 +92,6 @@ public class UserController {
 	}
 
 	private String getRedirectURLtoAffectedUser(User user) {
-		//String firstPartOfEmail = user.getEmail().split("@")[0];
 		return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + user.getEmail();
 	}
 
@@ -129,7 +127,7 @@ public class UserController {
 	
 	@GetMapping("/users/{id}/enabled/{status}/{pageNum}")
 	public String updateUserEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
+			String sortField, String sortDir, String keyword,
 			Model model) {
 		service.updateUserEnabledStatus(id, status);
 		String userStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";

@@ -17,10 +17,10 @@ $(document).ready(function(){
 		quantityInput = $("#quantity" + productId);
 		newQuantity = parseInt(quantityInput.val()) + 1;
 		
-		if(newQuantity < 6) {
+		if(newQuantity < 11) {
 			quantityInput.val(newQuantity);
 		} else {
-			showWarningModal('Số lượng tối đa là 5')
+			showWarningModal('Số lượng tối đa là 10')
 		}
 	});
 });

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "customers")
@@ -211,6 +212,27 @@ public class Customer {
 	
 	public String getFullName() {
 		return firstName + " " + lastName;
+	}
+	
+	@Transient
+	public String getReceiveAddress() {
+		String receiveAddress = firstName;
+		
+		if(lastName != null && !lastName.isEmpty()) receiveAddress += " " + lastName;
+		
+		if(!address.isEmpty())receiveAddress += ", " + address;
+		
+		if(!city.isEmpty())receiveAddress += ", " + city;
+		
+		if(state != null && !state.isEmpty()) receiveAddress += ", " + state;
+		
+		receiveAddress += ", " + country.getName();
+		
+		if(!postalCode.isEmpty())receiveAddress += ". Mã bưu điện: " + postalCode;
+		
+		if(!phoneNumber.isEmpty())receiveAddress += ". Số điện thoại: " + phoneNumber;
+		
+		return receiveAddress;
 	}
 	
 }

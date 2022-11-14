@@ -30,8 +30,8 @@ public class CustomerController {
 	}
 
 	@GetMapping("/customers/page/{pageNum}")
-	public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortField") String sortField,
-			@Param("sortDir") String sortDir, @Param("keyword") String keyword, Model model) {
+	public String listByPage(@PathVariable(name = "pageNum") int pageNum,String sortField,
+			String sortDir, String keyword, Model model) {
 		Page<Customer> page = customerService.listByPage(pageNum, sortField, sortDir, keyword);
 		List<Customer> listCustomers = page.getContent();
 
@@ -59,8 +59,7 @@ public class CustomerController {
 	@GetMapping("/customers/{id}/enabled/{status}/{pageNum}")
 	public String updateCustomerEnableStatus(@PathVariable(name = "pageNum") int pageNum,
 			@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
-			Model model) {
+			String sortField, String sortDir, String keyword, Model model) {
 		customerService.updateCustomerEnabledStatus(id, status);
 		String cusStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";
 		String message = "Khách hàng có ID: " + id + cusStatus;

@@ -51,10 +51,7 @@ public class ProductController {
 	}
 	@GetMapping("products/page/{pageNum}")
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum,
-			@Param("sortField") String sortField,
-			@Param("sortDir") String sortDir,
-			@Param("keyword") String keyword,
-			@Param("categoryId") Integer categoryId,
+			String sortField, String sortDir, String keyword, Integer categoryId,
 			Model model) {
 		Page<Product> page = productService.listByPage(pageNum, sortField, sortDir, keyword, categoryId);
 		List<Product> listProducts = page.getContent();
@@ -217,8 +214,7 @@ public class ProductController {
 
 	@GetMapping("/products/{id}/enabled/{status}/{pageNum}")
 	public String updateProductEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
-			@Param("sortField") String sortField, @Param("sortDir") String sortDir, @Param("keyword") String keyword,
-			@Param("categoryId") Integer categoryId, Model model) {
+			String sortField, String sortDir, String keyword, @Param("categoryId") Integer categoryId, Model model) {
 		productService.updateProductEnabledStatus(id, status);
 		String proStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";
 		String message = "Sản phẩm có ID: " + id + proStatus; 

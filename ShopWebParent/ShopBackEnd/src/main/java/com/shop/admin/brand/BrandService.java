@@ -16,8 +16,7 @@ import com.shop.common.entity.Brand;
 public class BrandService {
 	public static final int BRANDS_PER_PAGE = 10;
 
-	@Autowired
-	private BrandRepository repo;
+	@Autowired private BrandRepository repo;
 	
 	public List<Brand> listAll() {
 		return (List<Brand>) repo.findAll();
