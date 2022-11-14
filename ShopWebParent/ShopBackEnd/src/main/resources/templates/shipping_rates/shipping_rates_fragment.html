@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="cod_support" th:remove="tag">
+		<a th:if="${rate.codSupported}"
+			class="fas fa-hand-holding-usd fa-2x icon-black"
+			th:href="@{'/shipping_rates/cod/' + ${rate.id} + '/enabled/false/'+ ${currentPage} + '?'  + ${keyword != null ? 'sortField=' + sortField + '&sortDir=' + sortDir + '&keyword=' + keyword : 'sortField=' + sortField + '&sortDir=' + sortDir} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}"
+			th:title="'Vô hiệu hóa ' + ${entityName} + ' này'"></a>
+		<a th:unless="${rate.codSupported}"
+			class="fas fa-hand-holding-usd fa-2x icon-silver"
+			th:href="@{'/shipping_rates/cod/' + ${rate.id} + '/enabled/true/'+ ${currentPage} + '?' + ${keyword != null ? 'sortField=' + sortField + '&sortDir=' + sortDir + '&keyword=' + keyword : 'sortField=' + sortField + '&sortDir=' + sortDir} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}"
+			th:title="'Kích hoạt ' + ${entityName} + ' này'"></a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Sổ địa chỉ của bạn', 'none')" />
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: header_menu"></div>
+		<div th:replace="navigation :: search_nav"></div>
+		<div class="text-center">
+			<div>
+				<h2>Sổ địa chỉ của bạn</h2>
+			</div>
+			<div>
+				<a th:href="@{/address_book/new}" class="h4">Thêm địa chỉ mới</a>
+			</div>
+		</div>
+		<div th:if="${message != null}"
+			class="alert alert-success text-center m-1">[[${message}]]</div>
+		<div class="row m-1">
+			<div class="col-sm-6 mt-2">
+				<div class="card"
+					th:classappend="${usePrimaryAddressAsDefault ? 'bg-warning' : ''}">
+					<div class="card-header">
+						<div class="row">
+							<div class="col">
+								<b>Địa chỉ của bạn</b>
+								<th:block th:if="${usePrimaryAddressAsDefault}">
+									<span class="text-danger">[Mặc định]</span>
+									</th:block>
+									<th:block th:unless="${usePrimaryAddressAsDefault}">
+									<a th:href="@{'/address_book/default/0'}">[Đặt làm mặc định]</a>
+									</th:block>
+							</div>
+							<div class="col">
+								<div class="float-right">
+									<a class="fas fa-edit icon-black"
+									th:href="@{/account_details(redirect=address_book)}"
+									title="Chỉnh sửa địa chỉ này"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">[[${customer.receiveAddress}]]</div>
+				</div>
+			</div>
+			<th:block th:each="address, status : ${listAddresses}">
+				<div class="col-sm-6 mt-2">
+					<div class="card"
+						th:classappend="${address.defaultForShipping ? 'bg-warning' : ''}">
+						<div class="card-header">
+							<div class="row">
+								<div class="col">
+									<b>Địa chỉ #[[${status.count + 1}]]</b>
+									<th:block th:if="${address.defaultForShipping}">
+									<span class="text-danger">[Mặc định]</span>
+									</th:block>
+									<th:block th:unless="${address.defaultForShipping}">
+									<a th:href="@{'/address_book/default/' + ${address.id}}">[Đặt làm mặc định]</a>
+									</th:block>
+								</div>
+								<div class="col">
+								<div class="float-right">
+									<a class="fas fa-edit icon-black"
+									th:href="@{'/address_book/edit/' + ${address.id}}"
+									title="Chỉnh sửa địa chỉ này"></a>
+									&nbsp;
+									<a class="fas fa-trash icon-black link-delete"
+									th:entityId="${address.id}"
+									th:href="@{'/address_book/delete/' + ${address.id}}"
+									title="Chỉnh sửa địa chỉ này"></a>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="card-body">[[${address}]]</div>
+					</div>
+				</div>
+			</th:block>
+		</div>
+		<div>&nbsp;</div>
+		<div th:replace="fragments :: confirm_modal"></div>
+		<div th:replace="navigation :: footer_menu"></div>
+	</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".link-delete").on("click", function(e) {
+			e.preventDefault();
+			showDeleteConfirmModal($(this), 'địa chỉ');
+		});
+	});
+
+	function showDeleteConfirmModal(link, entityName) {
+	
+		entityId = link.attr("entityId");
+		$("#yesButton").attr("href",
+			link.attr("href"));
+		$("#confirmText").text(
+			"Bạn có chắc chắn muốn xóa " + entityName + " này (ID: "
+			+ entityId + ")?");
+		$("#confirmModal").modal();
+	}
+</script>
+</body>
+</html>
