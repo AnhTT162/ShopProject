@@ -85,7 +85,7 @@ public class CustomerService {
 		customer.setCreatedTime(new Date());
 		customer.setAuthenticationType(type);
 		customer.setPassword("");
-		customer.setAddress("");
+		customer.setAddressDetail("");
 		customer.setCity("");
 		customer.setState("");
 		customer.setPhoneNumber("");

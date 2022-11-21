@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.shop.common.entity.CartItem;
 import com.shop.common.entity.Customer;
-import com.shop.common.entity.Product;
+import com.shop.common.entity.product.Product;
 import com.shop.product.ProductRepository;
 
 @Service

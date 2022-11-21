@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +28,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.shop.admin.FileUploadUtil;
 import com.shop.admin.brand.BrandService;
 import com.shop.admin.category.CategoryService;
+import com.shop.admin.setting.SettingService;
 import com.shop.common.entity.Brand;
 import com.shop.common.entity.Category;
-import com.shop.common.entity.Product;
-import com.shop.common.entity.ProductImage;
+import com.shop.common.entity.product.Product;
+import com.shop.common.entity.product.ProductImage;
+import com.shop.common.entity.setting.Setting;
 import com.shop.common.exception.ProductNotFoundException;
 
 @Controller
@@ -44,15 +48,18 @@ public class ProductController {
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private SettingService settingService;
 
 	@GetMapping("/products")
-	public String listFirstPage(Model model) {
-		return listByPage(1, "name", "asc", null, 0, model);
+	public String listFirstPage(Model model, HttpServletRequest request) {
+		return listByPage(1, "name", "asc", null, 0, model, request);
 	}
 	@GetMapping("products/page/{pageNum}")
 	public String listByPage(@PathVariable(name = "pageNum") int pageNum,
 			String sortField, String sortDir, String keyword, Integer categoryId,
-			Model model) {
+			Model model, HttpServletRequest request) {
 		Page<Product> page = productService.listByPage(pageNum, sortField, sortDir, keyword, categoryId);
 		List<Product> listProducts = page.getContent();
 		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
@@ -77,7 +84,7 @@ public class ProductController {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("listCategories", listCategories);
 		
-		
+		loadCurrencySetting(request);
 		return "products/products";
 		
 	}
@@ -214,12 +221,12 @@ public class ProductController {
 
 	@GetMapping("/products/{id}/enabled/{status}/{pageNum}")
 	public String updateProductEnabledStatus(@PathVariable(name = "pageNum") int pageNum,@PathVariable(name = "id") Integer id, @PathVariable(name = "status") boolean status,
-			String sortField, String sortDir, String keyword, @Param("categoryId") Integer categoryId, Model model) {
+			String sortField, String sortDir, String keyword, @Param("categoryId") Integer categoryId, Model model,HttpServletRequest request) {
 		productService.updateProductEnabledStatus(id, status);
 		String proStatus = status ? " đã được kích hoạt" : " đã bị vô hiệu hóa";
 		String message = "Sản phẩm có ID: " + id + proStatus; 
 		model.addAttribute("message", message);	
-		return listByPage(pageNum, sortField, sortDir, keyword, categoryId, model);
+		return listByPage(pageNum, sortField, sortDir, keyword, categoryId, model, request);
 	}
 
 	@GetMapping("/products/delete/{id}")
@@ -240,7 +247,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/products/edit/{id}")
-	public String editProduct(@PathVariable("id") Integer id, Model model, RedirectAttributes attributes) {
+	public String editProduct(@PathVariable("id") Integer id, Model model, RedirectAttributes attributes, HttpServletRequest request) {
 		try {
 			Product product = productService.get(id);
 			List<Brand> listBrands = brandService.listAll();
@@ -249,6 +256,7 @@ public class ProductController {
 			model.addAttribute("product", product);
 			model.addAttribute("pageTitle", "Chỉnh sửa sản phẩm (ID: " + id + ")");
 			model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
+			loadCurrencySetting(request);
 			return "products/product_form";
 		} catch (ProductNotFoundException e) {
 			attributes.addFlashAttribute("message", e.getMessage());
@@ -257,15 +265,24 @@ public class ProductController {
 	}
 	
 	@GetMapping("/products/detail/{id}")
-	public String viewProductDetail(@PathVariable("id") Integer id, Model model, RedirectAttributes attributes) {
+	public String viewProductDetail(@PathVariable("id") Integer id, Model model, RedirectAttributes attributes, HttpServletRequest request) {
 		try {
 			Product product = productService.get(id);
 			model.addAttribute("product", product);
+			loadCurrencySetting(request);
 			return "products/product_detail_modal";
 		} catch (ProductNotFoundException e) {
 			attributes.addFlashAttribute("message", e.getMessage());
 			return "redirect:/products";
 		}
+	}
+	private void loadCurrencySetting(HttpServletRequest request) {
+		List<Setting> currencySettings = settingService.getCurrencySettings();
+		
+		for (Setting setting : currencySettings) {
+			request.setAttribute(setting.getKey(), setting.getValue());
+		}
+		
 	}
 
 }

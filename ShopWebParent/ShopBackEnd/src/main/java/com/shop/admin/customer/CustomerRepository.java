@@ -11,7 +11,7 @@ import com.shop.common.entity.Customer;
 public interface CustomerRepository extends PagingAndSortingRepository<Customer, Integer> {
 	
 	@Query("SELECT c FROM Customer c WHERE CONCAT(c.email, ' ', c.firstName, ' ',"
-			+ "c.lastName, ' ', c.address, ' ', c.city, ' ',"
+			+ "c.lastName, ' ', c.addressDetail, ' ', c.city, ' ',"
 			+ "c.state, ' ', c.country.name, ' ', c.postalCode) LIKE %?1%")
 	public Page<Customer> findAll(String keyword, Pageable pageable);
 	

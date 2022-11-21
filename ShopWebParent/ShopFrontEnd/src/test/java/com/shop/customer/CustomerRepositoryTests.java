@@ -42,7 +42,7 @@ public class CustomerRepositoryTests {
 		customer.setCountry(country);
 		customer.setState("Hà Nội");
 		customer.setCity("Hai Bà Trưng");
-		customer.setAddress("36 Chùa Liên Phái, Cầu Dền");
+		customer.setAddressDetail("36 Chùa Liên Phái, Cầu Dền");
 
 		customer.setPostalCode("112200");
 		customer.setCreatedTime(new Date());
@@ -67,7 +67,7 @@ public class CustomerRepositoryTests {
 		customer.setCountry(country);
 		customer.setState("Hà Nội");
 		customer.setCity("Cầu Giấy");
-		customer.setAddress("445 Nguyễn Khang, Yên Hòa");
+		customer.setAddressDetail("445 Nguyễn Khang, Yên Hòa");
 
 		customer.setPostalCode("122000");
 		customer.setCreatedTime(new Date());
@@ -92,7 +92,7 @@ public class CustomerRepositoryTests {
 		customer.setCountry(country);
 		customer.setState("Hà Nội");
 		customer.setCity("Đống Đa");
-		customer.setAddress("1 Xã Đàn");
+		customer.setAddressDetail("1 Xã Đàn");
 
 		customer.setPostalCode("123000");
 		customer.setCreatedTime(new Date());

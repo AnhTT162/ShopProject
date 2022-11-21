@@ -1,4 +1,4 @@
-package com.shop.common.entity;
+package com.shop.common.entity.product;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,12 +19,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.shop.common.entity.Brand;
+import com.shop.common.entity.Category;
+import com.shop.common.entity.IdBaseEntity;
+
 @Entity
 @Table(name = "products")
-public class Product {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+public class Product extends IdBaseEntity{
 	
 	@Column(unique = true, length = 256, nullable = false)
 	private String name;
@@ -84,13 +85,6 @@ public class Product {
 		this.id = id;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
